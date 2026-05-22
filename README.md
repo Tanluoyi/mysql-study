@@ -63,12 +63,4 @@ desc  查看库的情况
 改 update 表名 set 列名 =值 where 列名="值"
 查 select * from 表名；
 	select * from 表名 where 列名=值 查固定某一个条件的值
-=======
-MySQL的使用
-建库 create database 数据库名；
-建表 create tabale 表名 (列名  类型 ，列名 类型)；
-增 insert into 表名 values (1)；
-删
-改
-查 select * from 表名；
->>>>>>> a00bdf921d3ddd496c0cb73aec8e27538ee5fb6f
+
