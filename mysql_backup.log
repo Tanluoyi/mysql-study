@@ -1,6 +1,6 @@
 
 2026-5-23
-数据库备份：
+数据库备份 1：
 	安装数据库备份工具，percona,先下载安装包
 	yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 	yum insall -y percona...24.x86_64
@@ -35,6 +35,7 @@ ckup-8.0/Percona-XtraBackup-8.0.35-30/binary/redhat/7/x86_64/percona-xtrabackup-
 yum localinstall percona-xtrabackup-80-*.rpm
 
 2025-05-24  学习内容
+数据库备份 2：
 3/安装程序
 yum localinstall percona-xtrabackup-80 -y
 创建备份存放目录
