@@ -56,3 +56,26 @@ ps aux | grep mysqld | grep -v grep  确认进程是否存在
 重新登录mysql，这时密码不变，可以用之前自定义密码登录
 
 小拓展：主从复制，同步数据库，通过中继日志复制执行sql语句
+
+2025-5.25 学习内容
+使用脚本实现自动备份数据库，通过时间戳分类备份文件
+
+#!/bin/bash
+# 定义时间戳
+timestamp=$(date +%Y%m%d_%H%M)
+# 定义备份目录
+backup_dir=/data/backup/full
+retain=7  # 保留最近7天的备份
+# 定义备份文件名
+backup_file="$backup_dir/backup_$timestamp"
+xtrabackup --backup --target-dir=$backup_file --user=root --password='123'
+# 如果备份成功，清理旧备份
+if [ $? -eq 0 ]; then
+    # 列出所有备份目录（按名称排序），删除超出保留数量的最旧目录
+    cd "$backup_base" || exit
+    ls -1 | grep -E '^[0-9]{8}_[0-9]{4}$' | sort | head -n -$retain | xargs -r rm -rf
+fi
+#设置定时任务，每天凌晨2点执行备份脚本
+0 2 * * * /usr/local/bin/backup_data.sh >> /var/log/mysql_backup.log 2>&1
+#遇到的问题:变量名称写错，backup_dir写成backu，导致脚本执行完没有保存到指定目录。
+# +号后面不能有空格  timestamp=$(date + %Y%m%d_%H%M)  改： timestamp=$(date +%Y%m%d_%H%M)
