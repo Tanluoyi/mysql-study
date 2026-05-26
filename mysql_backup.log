@@ -59,8 +59,7 @@ ps aux | grep mysqld | grep -v grep  确认进程是否存在
 小拓展：主从复制，同步数据库，通过中继日志复制执行sql语句
 
 2025-5.25 学习内容
-使用脚本实现自动备份数据库，通过时间戳分类备份文件
-
+#使用脚本实现自动备份数据库，通过时间戳分类备份文件
 #!/bin/bash
 # 定义时间戳
 timestamp=$(date +%Y%m%d_%H%M)
@@ -80,3 +79,34 @@ fi
 0 2 * * * /usr/local/bin/backup_data.sh >> /var/log/mysql_backup.log 2>&1
 #遇到的问题:变量名称写错，backup_dir写成backu，导致脚本执行完没有保存到指定目录。
 # +号后面不能有空格  timestamp=$(date + %Y%m%d_%H%M)  改： timestamp=$(date +%Y%m%d_%H%M)
+
+
+2025-5-26 学习内容
+数据库的主从复制
+主从复制的原理：
+主服务器将数据修改记录写入二进制日志，
+备库I/O线程将主库上的日志复制到自己的中继日志中(relay log)，
+备库SQL线程读取中继日志并执行其中的SQL语句，从而实现数据同步。
+主从复制的配置步骤：
+1. 在主服务器上创建复制用户，并授权REPLICATION SLAVE权限。
+CREATE USER 'repl'@'%' IDENTIFIED BY 'password';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%';
+2. 在主服务器上查看当前的二进制日志文件名和位置。
+SHOW MASTER STATUS;
+3. 在备服务器上配置复制参数，指定主服务器的IP地址、复制用户和密码，以及主服务器的日志文件名和位置。
+CHANGE MASTER TO
+MASTER_HOST='主服务器IP地址',
+MASTER_USER='repl',
+MASTER_PASSWORD='password',
+MASTER_LOG_FILE='主服务器日志文件名',
+MASTER_LOG_POS=主服务器日志位置;
+4. 启动备服务器的复制线程。
+START SLAVE;
+5. 在备服务器上查看复制状态，确保复制正常运行。
+SHOW SLAVE STATUS\G;
+主从复制的注意事项：
+1. 主从服务器的时钟应该同步，建议使用NTP服务。
+2. 主从服务器的网络连接应该稳定，避免复制中断。
+3. 主从服务器的MySQL版本应该兼容，建议使用相同版本。
+4. 主从复制是异步的，主服务器的修改可能会有延迟才会反映到备服务器上。
+5. 定期检查复制状态，及时处理复制错误。
