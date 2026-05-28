@@ -8,7 +8,7 @@ yum install -y mysql-community*
 systemctl start mysqld启动服务
 grep password /var/log/mysqld.log查看临时密码
 
-2026-5-21
+
 给mysql改密码时的报错
 unable to change password; error: 'Your password does not satisfy the current policy requirements'
 先登录mysql  mysql -u root -p
@@ -46,7 +46,7 @@ enabled=1
 yum install -y mysql-community-server
 
 <<<<<<< HEAD
-2026-5-22
+
 
 MySQL的使用
 建库 create database 数据库名； 
@@ -61,7 +61,7 @@ desc  查看库的情况
 查 select * from 表名；
 	select * from 表名 where 列名=值 查固定某一个条件的值
 
-2026-5-23
+
 数据库备份 1：
 	安装数据库备份工具，percona,先下载安装包
 	yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
@@ -96,7 +96,7 @@ ckup-8.0/Percona-XtraBackup-8.0.35-30/binary/redhat/7/x86_64/percona-xtrabackup-
 2. 使用 yum 本地安装以自动解决依赖
 yum localinstall percona-xtrabackup-80-*.rpm
 
-2025-05-24  学习内容
+
 数据库备份 2：
 3/安装程序
 yum localinstall percona-xtrabackup-80 -y
@@ -120,7 +120,7 @@ ps aux | grep mysqld | grep -v grep  确认进程是否存在
 
 小拓展：主从复制，同步数据库，通过中继日志复制执行sql语句
 
-2025-5.25 学习内容
+
 #使用脚本实现自动备份数据库，通过时间戳分类备份文件
 #!/bin/bash
 # 定义时间戳
@@ -143,7 +143,7 @@ fi
 # +号后面不能有空格  timestamp=$(date + %Y%m%d_%H%M)  改： timestamp=$(date +%Y%m%d_%H%M)
 
 
-2025-5-26 学习内容
+
 数据库的主从复制
 主从复制的原理：
 主服务器将数据修改记录写入二进制日志，
